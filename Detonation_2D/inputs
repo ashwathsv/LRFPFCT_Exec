@@ -1,0 +1,118 @@
+amrex.fpe_trap_invalid=1
+
+max_step  = 500000
+stop_time = 5.0e-4
+
+geometry.is_periodic = 0 0 1
+geometry.coord_sys   = 0  # 0 => cart, 1 => RZ  2=>spherical
+geometry.prob_lo     =   0.0     0.0     	0.0
+geometry.prob_hi     =   1.2     0.18     1.0
+amr.n_cell           =   4000     600      	32
+
+#geometry.prob_hi     =   0.006  0.0003     1.0
+#amr.n_cell           =   80     4      	32
+
+
+# >>>>>>>>>>>>>  BC FLAGS <<<<<<<<<<<<<<<<
+# 0 = Interior           3 = Symmetry
+# 1 = Inflow             4 = SlipWall
+# 2 = Outflow            5 = NoSlipWall
+# >>>>>>>>>>>>>  BC FLAGS <<<<<<<<<<<<<<<<
+cns.lo_bc       =  3   3   0
+cns.hi_bc       =  2   3   0
+
+cns.cfl = 0.2 # cfl number for hyperbolic system
+cns.scaledt_pres = 0
+
+cns.v = 2
+amr.v = 1
+cns.refine_max_dengrad_lev 	= 10
+cns.diff1					= 0.9999
+cns.pure_advection          = 0
+
+# REACTION FLAGS (SET cns.do_react to 1 for reaction source terms)
+cns.do_react				= 1
+cns.do_sootfoil				= 1
+cns.react_nsubcycle			= 1
+cns.start_sfoil_time		= 3.0e-4
+
+cns.do_fct_resdiff			= 1
+cns.do_crossterms_ad		= 0
+
+cns.do_heun					= 0
+cns.minp					= 90000.0
+cns.minT					= 280
+
+cns.refine_based_maxgrad 	= 1
+cns.grad_comp 				= 7
+cns.tagfrac					= 0.5
+
+cns.do_reflux				= 1
+# REFINEMENT / REGRIDDING 
+amr.max_level       = 0       # maximum level number allowed
+amr.ref_ratio       = 2 2 2 2 # refinement ratio
+amr.regrid_int      = 2 2 2 2 # how often to regrid
+amr.blocking_factor = 4
+amr.max_grid_size   = 64000
+amr.n_error_buf     = 2 # number of buffer cells in error est
+amr.grid_eff        = 0.99     # what constitutes an efficient grid
+
+# CHECKPOINT FILES
+amr.checkpoint_files_output = 1
+amr.check_file              = Outputs_L0/chk    # root name of checkpoint file
+amr.check_int               = 4000    # number of timesteps between checkpoints
+amr.restart                 = Outputs_L0/chk00014337
+
+# PLOTFILES
+amr.plot_files_output = 1
+amr.file_name_digits  = 8
+amr.plot_file         = Outputs_L0/plt     # root name of plotfile
+amr.plot_int          = 1500    # number of timesteps between plotfiles
+#amr.derive_plot_vars  = 
+
+# EOS PARAMETERS
+eos.gamma				= 1.33
+
+# read in molecular weight in CGS units
+eos.molecular_weight	= 27
+
+# heat release, activation energy, Arrhenius pre-exponential, thermal conductivity (kappa_0)
+# will be read in only if do_react == 1
+# heat release is a non-dimensional quantity (q * Mw / (R * T_0)) (will be converted to SI units in the code)
+eos.heat_release		= 26.33
+#eos.heat_release		= 0.0
+
+
+eos.activation_energy	= 12.32
+eos.pre_exponential		= 1.88e8
+
+eos.kappa_0				= 2.54e-5
+
+# problem specific parameter
+prob.dia_blast 	= 0.09
+
+prob.xcm		= 0.07
+prob.ycm		= 0.1
+
+prob.p1	= 5066250.0
+prob.p0   	= 101325.0
+
+prob.T1 	= 3000
+prob.T0 	= 298
+
+prob.u1   	= 0.0
+prob.u0   	= 0.0
+
+prob.v1   	= 0.0
+prob.v0   	= 0.0
+
+prob.Y1		= 0.0
+prob.Y0		= 1.0
+
+# DETAILS ABOUT WRITING PRESSURE FILE
+#prob.pressure_file = pressfiles/pressuredataL0_temp_N16000_C2.txt
+prob.pressure_file = pressfiles/src_in_difftmpsdt_N32000_L0_C1.txt
+prob.print_pres_data = 1
+prob.print_append = 0
+prob.get_maxgrad  = 1
+prob.pres_int = 1 # Prints out the maximum pressure and its location every N steps(N is user input)

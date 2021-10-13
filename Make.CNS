@@ -1,0 +1,44 @@
+AMREX_HOME := $(HOME)/amrex-21.06
+TOP := $(HOME)/LRFPFCT-CPP
+
+ifeq ($(LRFPFCT_REACTION),1)
+EBASE := CNSreact
+DEFINES += -DLRFPFCT_REACTION
+else
+EBASE := CNS
+endif
+
+DIM := 2
+
+LAZY := TRUE
+
+BL_NO_FORT = TRUE
+
+include $(AMREX_HOME)/Tools/GNUMake/Make.defs
+
+# CNS uses a coarse grained OMP approach
+DEFINES += -DAMREX_CRSEGRNDOMP
+
+include $(TOP)/Source/Make.package
+INCLUDE_LOCATIONS += $(TOP)/Source
+VPATH_LOCATIONS   += $(TOP)/Source
+
+include $(TOP)/Source/hydro/Make.package
+INCLUDE_LOCATIONS += $(TOP)/Source/hydro
+VPATH_LOCATIONS   += $(TOP)/Source/hydro
+
+include $(TOP)/Source/diffusion/Make.package
+INCLUDE_LOCATIONS += $(TOP)/Source/diffusion
+VPATH_LOCATIONS   += $(TOP)/Source/diffusion
+
+include $(TOP)/Source/reaction/Make.package
+INCLUDE_LOCATIONS += $(TOP)/Source/reaction
+VPATH_LOCATIONS   += $(TOP)/Source/reaction
+
+include $(AMREX_HOME)/Src/Base/Make.package
+include $(AMREX_HOME)/Src/Boundary/Make.package
+include $(AMREX_HOME)/Src/AmrCore/Make.package
+include $(AMREX_HOME)/Src/Amr/Make.package
+
+include $(AMREX_HOME)/Tools/GNUMake/Make.rules
+
